@@ -1,6 +1,8 @@
 package com.example.styleomega;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -8,8 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterActivity extends AppCompatActivity {
-    private Button registerButton,cancelButton;
-    private EditText inputEmail,inputFName,inputLName,inputPhone,inputPassword,inputCPassword;
+    private Button registerButton, cancelButton;
+    private EditText inputEmail, inputFName, inputLName, inputPhone, inputPassword, inputCPassword;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +25,14 @@ public class RegisterActivity extends AppCompatActivity {
         inputPhone = (EditText) findViewById(R.id.registerPhone);
         inputPassword = (EditText) findViewById(R.id.registerPassword);
         inputCPassword = (EditText) findViewById(R.id.registerCPassword);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
