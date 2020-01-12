@@ -1,5 +1,6 @@
 package com.example.styleomega;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,8 +25,8 @@ import com.google.firebase.database.ValueEventListener;
 public class RegisterActivity extends AppCompatActivity {
     private Button registerButton, cancelButton;
     private EditText inputEmail, inputFName, inputLName, inputPhone, inputPassword, inputCPassword;
+    private ProgressDialog dialog;
     private User user;
-    //private DatabaseReference myRef;
     private FirebaseAuth mAuth;
 
     @Override
@@ -41,6 +42,8 @@ public class RegisterActivity extends AppCompatActivity {
         inputPhone = (EditText) findViewById(R.id.registerPhone);
         inputPassword = (EditText) findViewById(R.id.registerPassword);
         inputCPassword = (EditText) findViewById(R.id.registerCPassword);
+
+
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +62,12 @@ public class RegisterActivity extends AppCompatActivity {
                 String phone = (inputPhone.getText().toString().trim());
                 String password1= inputPassword.getText().toString().trim();
                 String password2= inputCPassword.getText().toString().trim();
+                dialog = new ProgressDialog(RegisterActivity.this);
+                dialog.setTitle("Loading");
+                dialog.setMessage("Setting up account");
+                dialog.setCanceledOnTouchOutside(false);
+
+
 
                 if(TextUtils.isEmpty(email)){
                     Toast.makeText(RegisterActivity.this, "Enter your E-mail", Toast.LENGTH_SHORT).show();
@@ -78,20 +87,22 @@ public class RegisterActivity extends AppCompatActivity {
                 if(TextUtils.isEmpty(password2)){
                     Toast.makeText(RegisterActivity.this, "Enter your Confirmed Password", Toast.LENGTH_SHORT).show();
                 }
-                //User user = new User(email, fName, lName, password1, phone);
                 else {
+                    dialog.show();
                     if(password1.equals(password2)){
                         validateUser(email, fName, lName, phone, password1, password2);
 
 
                     }
                     else {
+                        dialog.dismiss();
                         Toast.makeText(RegisterActivity.this, "Passwords do not match, try again", Toast.LENGTH_SHORT).show();
                         inputPassword.getText().clear();
                         inputCPassword.getText().clear();
 
                     }
                 }
+
             }
         });
     }
@@ -104,11 +115,13 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child("User").child(email).exists()){
+                    dialog.dismiss();
                     Toast.makeText(RegisterActivity.this,"Account exists",Toast.LENGTH_LONG).show();
                 }
                 else{
                     User user = new User(email, fName, lName, password1, phone);
                     myRef.child("User").child(email).setValue(user);
+                    dialog.dismiss();
                     Toast.makeText(RegisterActivity.this,"Account created",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
                     startActivity(intent);
