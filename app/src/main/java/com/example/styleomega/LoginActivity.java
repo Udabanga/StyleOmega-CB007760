@@ -95,11 +95,26 @@ public class LoginActivity extends AppCompatActivity {
                         inputPassword.getText().clear();
                     }
                 }
+                else if(dataSnapshot.child("Admin").child(email).exists()){
+                    Admin loginUser = dataSnapshot.child("Admin").child(email).getValue(Admin.class);
+                    if(loginUser.getPassword().equals(password)){
+                        dialog.dismiss();
+                        //Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                        //startActivity(intent);
+                        Toast.makeText(LoginActivity.this,"Admin Logged in",Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        dialog.dismiss();
+                        Toast.makeText(LoginActivity.this,"Incorrect Password",Toast.LENGTH_LONG).show();
+                        inputPassword.getText().clear();
+                    }
+                }
                 else{
                     dialog.dismiss();
                     Toast.makeText(LoginActivity.this,"Incorrect Email",Toast.LENGTH_LONG).show();
                     inputPassword.getText().clear();
                 }
+
 
             }
 
