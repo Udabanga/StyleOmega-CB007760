@@ -85,6 +85,8 @@ public class LoginActivity extends AppCompatActivity {
                     User loginUser = dataSnapshot.child("User").child(email).getValue(User.class);
                     if(loginUser.getPassword().equals(password)){
                         dialog.dismiss();
+                        Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                        startActivity(intent);
                         Toast.makeText(LoginActivity.this,"Logged in",Toast.LENGTH_LONG).show();
                     }
                     else{
